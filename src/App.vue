@@ -3,7 +3,9 @@
     <h2>
       {{ title }}
     </h2>
-    <timeline :congressMembersData="congressMembersData"></timeline>
+    <div v-if="dataReady">
+      <timeline :congressMembersData="congressMembersData"></timeline>
+    </div>
   </div>
 </template>
 
@@ -19,6 +21,7 @@ export default {
     return {
       title: "Minority Groups In Congresss",
       congressMembersData: {},
+      dataReady: false,
     };
   },
   mounted() {
@@ -28,6 +31,7 @@ export default {
     async fetchData() {
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
       this.congressMembersData = data;
+      this.dataReady = true;
     },
   },
 };

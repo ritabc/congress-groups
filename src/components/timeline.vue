@@ -40,28 +40,51 @@ export default {
   },
   methods: {
     generateSVG() {
+      const w = 300;
+      const h = 850;
+      const padding = 30;
+
+      // Setup timeline scale and (y) axis
       let tlScale = d3
         .scaleTime()
         .domain([this.earliestYear(), this.latestYear()])
-        .range([0, 850]); // corresponds to height - 2nd value must be less than height (850 currently)
+        .range([0, h - 30]); // corresponds to height - 2nd value must be less than height (850 currently)
       let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
+
+      // Setup (TODO: Make invisible) x-axis, or the axis of n congress people in a session
+      let nScale = d3.scaleQuantize(
+        [0, this.maxPeoplePerCongress()],
+        [padding, w - padding * 2]
+      );
+      // let nAxis = d3
+      //   .axisBottom(nScale)
+      //   .tickSize(0)
+      //   .tickValues([1, 2, 3, 4, 5]);
+      let nAxis = d3.axisBottom(nScale);
+
+      // Draw d3 element
       const svg = d3
         .select("#timeline")
         .append("svg")
-        .attr("width", 300)
-        .attr("height", 850);
+        .attr("width", w)
+        .attr("height", h);
       svg
         .append("g")
-        .attr("class", "axis")
+        .attr("class", "timeline-axis")
         .attr("transform", "translate(30, 0)")
         .call(tlAxis);
+      svg
+        .append("g")
+        .attr("class", "n-axis")
+        .attr("transform", `translate(0, ${h - padding})`)
+        .call(nAxis);
       svg
         .selectAll("circle")
         .data(this.congressMembersData)
         .enter()
         .append("circle")
         .attr("cy", (d) => {
-          // If works, will display dot for each congressMember, across all groups
+          // Display dot for each congressMember, across all groups
           return tlScale(new Date(parseInt(d.SessionBegan), 0, 0, 0));
         })
         .attr("cx", 50)
@@ -74,6 +97,10 @@ export default {
     latestYear() {
       // TODO: Remove hard coding
       return new Date(2021, 0, 0, 0);
+    },
+    maxPeoplePerCongress() {
+      // TODO: Remove hard coding
+      return 15;
     },
   },
 };
