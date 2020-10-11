@@ -26,7 +26,7 @@ export default {
     };
   },
   mounted() {
-    this.generateTimeline();
+    this.generateSVG();
   },
   computed: {
     congressAndYearRange: function () {
@@ -39,22 +39,33 @@ export default {
     },
   },
   methods: {
-    generateTimeline() {
+    generateSVG() {
       let tlScale = d3
         .scaleTime()
         .domain([this.earliestYear(), this.latestYear()])
-        .range([0, 1000]);
-      let tlAxis = d3.axisLeft(tlScale).ticks(30);
+        .range([0, 850]); // corresponds to height - 2nd value must be less than height (850 currently)
+      let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
       const svg = d3
         .select("#timeline")
         .append("svg")
         .attr("width", 300)
-        .attr("height", 1000);
+        .attr("height", 850);
       svg
         .append("g")
         .attr("class", "axis")
         .attr("transform", "translate(30, 0)")
         .call(tlAxis);
+      svg
+        .selectAll("circle")
+        .data(this.congressMembersData)
+        .enter()
+        .append("circle")
+        .attr("cy", (d) => {
+          // If works, will display dot for each congressMember, across all groups
+          return tlScale(new Date(parseInt(d.SessionBegan), 0, 0, 0));
+        })
+        .attr("cx", 50)
+        .attr("r", 5);
     },
     earliestYear() {
       // TODO: Remove hard coding
