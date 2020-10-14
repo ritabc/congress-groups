@@ -30,6 +30,12 @@ export default {
   methods: {
     async fetchData() {
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
+
+      // // For Now, we're only processing House memberships (not Senate, misc)
+      // let houseOnly = data.filter((row) => {
+      //   row.Service === "House";
+      // });
+      // console.log(houseOnly);
       this.congressMembersData = data;
       this.dataReady = true;
     },
