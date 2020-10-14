@@ -93,16 +93,18 @@ export default {
   methods: {
     generateSVG(dataToUse) {
       console.log(dataToUse);
-      const w = 300;
-      const h = 850;
-      const padding = 30;
+      const margin = { top: 30, right: 10, bottom: 30, left: 30 };
+      const svgWidth = 300;
+      const svgHeight = 850;
+      const chartWidth = svgWidth - margin.left - margin.right;
+      const chartHeight = svgHeight - margin.top - margin.bottom;
 
       // Setup svg
       const svg = d3
         .select("#timeline")
         .append("svg")
-        .attr("width", w)
-        .attr("height", h);
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
 
       // Setup timeline scale and (y) axis
       let tlScale = d3
@@ -113,28 +115,28 @@ export default {
           new Date(this.earliestYear().getTime() - 525600 * 60000 * 5),
           this.latestYear(),
         ])
-        .range([0, h - 30]); // what values you want to pop out (y values) - 2nd value must be less than height (850 currently)
+        .range([margin.top, margin.top + chartHeight]); // what values you want to pop out (y values)
       let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
 
       // Draw timeline axis
       svg
         .append("g")
         .attr("class", "timeline-axis")
-        .attr("transform", "translate(30, 0)")
+        .attr("transform", `translate(${margin.left}, 0)`)
         .call(tlAxis);
 
       // Setup x scale & axis
       let nScale = d3
         .scaleLinear()
         .domain([0, this.maxPeoplePerCongress()])
-        .range([0, 300]);
-      let nAxis = d3.axisBottom(nScale);
+        .range([margin.left, margin.left + chartWidth]);
+      let nAxis = d3.axisBottom(nScale).ticks(10);
 
       // Draw x axis
       svg
         .append("g")
         .attr("class", "n-axis")
-        .attr("transform", `translate(0, ${h - padding})`)
+        .attr("transform", `translate(0, ${margin.top + chartHeight})`)
         .call(nAxis);
 
       // Draw each circle at fixed x position
@@ -235,7 +237,7 @@ export default {
     },
     maxPeoplePerCongress() {
       // TODO: Remove hard coding
-      return 220;
+      return 50;
     },
   },
 };
