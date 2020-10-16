@@ -93,9 +93,10 @@ export default {
   methods: {
     generateSVG(dataToUse) {
       console.log(dataToUse);
-      const margin = { top: 30, right: 10, bottom: 30, left: 30 };
-      const svgWidth = 300;
-      const svgHeight = 850;
+      const margin = { top: 30, right: 10, bottom: 30, left: 35 };
+      const svgWidth = 450;
+      const svgHeight = 950;
+      const radius = 3;
       const chartWidth = svgWidth - margin.left - margin.right;
       const chartHeight = svgHeight - margin.top - margin.bottom;
 
@@ -130,33 +131,48 @@ export default {
         .scaleLinear()
         .domain([0, this.maxPeoplePerCongress()])
         .range([margin.left, margin.left + chartWidth]);
-      let nAxis = d3.axisBottom(nScale).ticks(10);
 
       // Draw x axis
-      svg
-        .append("g")
-        .attr("class", "n-axis")
-        .attr("transform", `translate(0, ${margin.top + chartHeight})`)
-        .call(nAxis);
+      // let nAxis = d3.axisBottom(nScale).ticks(10);
+      // svg
+      //   .append("g")
+      //   .attr("class", "n-axis")
+      //   .attr("transform", `translate(0, ${margin.top + chartHeight})`)
+      //   .call(nAxis);
 
-      // Draw each circle at fixed x position
-      svg
-        .selectAll("circle")
+      // Add svg groups each with .congress-session
+      let congressSessions = svg
+        .selectAll(".congress-session")
         .data(dataToUse)
         .enter()
+        .append("g")
+        .attr("class", "congress-session");
+
+      // To .congress-session, add a circle
+      congressSessions
+        .selectAll("circle")
+        // d is each session's data (with congress info, year info, and list of members)
+        .data((d) =>
+          d.Members.map((member) => {
+            return {
+              congress: d.Congress,
+              yearRange: d.YearRange,
+              sessionBegan: d.SessionBegan,
+              sessionEnded: d.SessionEnded,
+              member: member,
+            };
+          })
+        )
+        .enter()
         .append("circle")
-        .attr("class", "dot")
-        .attr("cy", (d) => {
-          // Display dot for each congressMember, across all groups
-          return tlScale(new Date(parseInt(d.SessionBegan), 0, 0, 0));
+        .attr("cy", (d, i) => {
+          return tlScale(new Date(parseInt(d.sessionBegan), 0, 0, 0));
         })
-        // .attr("cx", 50)
-        .attr("cx", (d) => {
-          console.log(d.Members.length);
-          console.log(nScale(d.Members.length));
-          return nScale(d.Members.length);
+        .attr("cx", (d, i) => {
+          return nScale(i);
         })
-        .attr("r", 5);
+        .attr("r", radius)
+        .attr("transform", `translate(${radius}, 0)`);
     },
     filterOutSenate(data) {
       let ret = data.filter((row) => {
@@ -237,7 +253,7 @@ export default {
     },
     maxPeoplePerCongress() {
       // TODO: Remove hard coding
-      return 50;
+      return 55;
     },
   },
 };
