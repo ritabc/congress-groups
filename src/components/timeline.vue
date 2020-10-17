@@ -27,9 +27,6 @@ export default {
     };
   },
   mounted() {
-    // let houseOnly = this.filterOutSenate(this.congressMembersData);
-    // let statesOnly = this.filterOutNonStates(houseOnly);
-    // this.dataToUse = this.showOnlyGroup("Black", statesOnly)
     this.dataToUse = this.showOnlyGroup(
       "Black",
       this.filterOutNonStates(this.filterOutSenate(this.congressMembersData))
@@ -99,6 +96,7 @@ export default {
       const radius = 3;
       const chartWidth = svgWidth - margin.left - margin.right;
       const chartHeight = svgHeight - margin.top - margin.bottom;
+      const oranges = ["#f0a150", "#f48020", "#c76706"];
 
       // Setup svg
       const svg = d3
@@ -172,6 +170,9 @@ export default {
           return nScale(i);
         })
         .attr("r", radius)
+        .style("fill", (d, i) => {
+          return oranges[i % 3];
+        })
         .attr("transform", `translate(${radius}, 0)`);
     },
     filterOutSenate(data) {
