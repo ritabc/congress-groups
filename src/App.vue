@@ -3,9 +3,10 @@
     <h2>
       {{ title }}
     </h2>
-    <div v-if="dataReady">
-      <timeline :congressMembersData="congressMembersData"></timeline>
-    </div>
+    <router-view></router-view>
+    <!-- <div v-if="dataReady">
+      <timeline v-bind:congressMembersData="congressMembersData"></timeline>
+    </div> -->
   </div>
 </template>
 
@@ -24,22 +25,22 @@ export default {
       dataReady: false,
     };
   },
-  mounted() {
-    this.fetchData();
-  },
-  methods: {
-    async fetchData() {
-      let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
+  // mounted() {
+  //   this.fetchData();
+  // },
+  // methods: {
+  //   async fetchData() {
+  //     let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
 
-      // // For Now, we're only processing House memberships (not Senate, misc)
-      // let houseOnly = data.filter((row) => {
-      //   row.Service === "House";
-      // });
-      // console.log(houseOnly);
-      this.congressMembersData = data;
-      this.dataReady = true;
-    },
-  },
+  //     // // For Now, we're only processing House memberships (not Senate, misc)
+  //     // let houseOnly = data.filter((row) => {
+  //     //   row.Service === "House";
+  //     // });
+  //     // console.log(houseOnly);
+  //     this.congressMembersData = data;
+  //     this.dataReady = true;
+  //   },
+  // },
 };
 </script>
 

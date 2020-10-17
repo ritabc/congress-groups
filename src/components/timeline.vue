@@ -1,16 +1,5 @@
 <template>
   <div>
-    <div>
-      <p
-        class="congress"
-        v-bind:key="(congress, index)"
-        v-for="(congress, index) in congressAndYearRange"
-      >
-        <span v-if="index % 3 == 0">
-          {{ congress }}
-        </span>
-      </p>
-    </div>
     <div id="timeline"></div>
   </div>
 </template>
@@ -19,7 +8,6 @@
 import * as d3 from "d3";
 export default {
   name: "timeline",
-  props: ["congressMembersData"],
   data() {
     return {
       msg: "Message in Timeline",
@@ -27,21 +15,9 @@ export default {
     };
   },
   mounted() {
-    this.dataToUse = this.showOnlyGroup(
-      "Black",
-      this.filterOutNonStates(this.filterOutSenate(this.congressMembersData))
-    );
-    this.generateSVG(this.dataGroupedByCongress);
+    this.fetchDataAndGenerateSVG();
   },
   computed: {
-    congressAndYearRange: function () {
-      let setOfCongressAndRange = new Set();
-      this.congressMembersData.forEach((row) => {
-        let s = `${row.Congress} (${row.SessionBegan} - ${row.SessionEnded})`;
-        setOfCongressAndRange.add(s);
-      });
-      return setOfCongressAndRange;
-    },
     dataGroupedByCongress: function () {
       // transform data from:
       // [{congress: 56, yearRange: (1985-1938), person: ABC...}, {congress: 56, yearRange: (1985-1938), person: DEF...} ]
@@ -88,8 +64,16 @@ export default {
     },
   },
   methods: {
+    async fetchDataAndGenerateSVG() {
+      let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
+      this.dataToUse = this.showOnlyGroup(
+        "Black",
+        this.filterOutNonStates(this.filterOutSenate(data))
+      );
+      this.generateSVG(this.dataGroupedByCongress);
+      this.dataReady = true;
+    },
     generateSVG(dataToUse) {
-      console.log(dataToUse);
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
       const svgWidth = 450;
       const svgHeight = 950;
