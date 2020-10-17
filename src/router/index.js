@@ -2,9 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomePage from './../views/homepage.vue'
 import Timeline from './../components/timeline.vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 Vue.use(VueRouter)
-
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 const routes = [{
     path: '/', component: HomePage
 },

@@ -1,5 +1,10 @@
 <template>
   <div>
+    <label
+      >Choose a Minority Group to Show Their Representation in Congress</label
+    >
+    <b-form-select v-model="group" v-bind:options="groups" class="mx-3">
+    </b-form-select>
     <div id="timeline"></div>
   </div>
 </template>
@@ -12,6 +17,17 @@ export default {
     return {
       msg: "Message in Timeline",
       dataToUse: {},
+      group: null,
+      groups: [
+        {
+          value: null,
+          text: "Choose a Group",
+        },
+        { value: "Black", text: "Black Americans" },
+        { value: "Women", text: "Female Americans" },
+        { value: "Hispanic", text: "Hispanic Americans" },
+        { value: "APA", text: "Asian Pacific Americans" },
+      ],
     };
   },
   mounted() {
