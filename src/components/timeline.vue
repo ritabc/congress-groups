@@ -1,9 +1,14 @@
 <template>
   <div>
-    <label
-      >Choose a Minority Group to Show Their Representation in Congress</label
+    <label>
+      Choose a Minority Group to Show Their Representation in Congress
+    </label>
+    <b-form-select
+      v-model="group"
+      v-bind:options="groups"
+      v-on:change="fetchDataAndGenerateSVG"
+      class="mx-3"
     >
-    <b-form-select v-model="group" v-bind:options="groups" class="mx-3">
     </b-form-select>
     <div id="timeline"></div>
   </div>
@@ -31,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchDataAndGenerateSVG();
+    // this.fetchDataAndGenerateSVG();
   },
   computed: {
     dataGroupedByCongress: function () {
@@ -87,7 +92,6 @@ export default {
         this.filterOutNonStates(this.filterOutSenate(data))
       );
       this.generateSVG(this.dataGroupedByCongress);
-      this.dataReady = true;
     },
     generateSVG(dataToUse) {
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
