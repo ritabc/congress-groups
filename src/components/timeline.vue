@@ -6,7 +6,7 @@
     <b-form-select
       v-model="group"
       v-bind:options="groups"
-      v-on:change="fetchDataAndGenerateSVG"
+      v-on:change="fetchDataAndGenerateSVG($event, group)"
       class="mx-3"
     >
     </b-form-select>
@@ -85,10 +85,10 @@ export default {
     },
   },
   methods: {
-    async fetchDataAndGenerateSVG() {
+    async fetchDataAndGenerateSVG(event, group) {
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
       this.dataToUse = this.showOnlyGroup(
-        "Black",
+        group,
         this.filterOutNonStates(this.filterOutSenate(data))
       );
       this.generateSVG(this.dataGroupedByCongress);
@@ -102,10 +102,14 @@ export default {
       const chartHeight = svgHeight - margin.top - margin.bottom;
       const oranges = ["#f0a150", "#f48020", "#c76706"];
 
+      // Remove any svg's with .chart that already exist
+      d3.selectAll(".chart").remove();
+
       // Setup svg
       const svg = d3
         .select("#timeline")
         .append("svg")
+        .attr("class", "chart")
         .attr("width", svgWidth)
         .attr("height", svgHeight);
 
