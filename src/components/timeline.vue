@@ -94,6 +94,7 @@ export default {
       this.generateSVG(this.dataGroupedByCongress);
     },
     generateSVG(dataToUse) {
+      console.log(dataToUse);
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
       const svgWidth = 450;
       const svgHeight = 950;
@@ -116,13 +117,9 @@ export default {
       // Setup timeline scale and (y) axis
       let tlScale = d3
         .scaleTime()
-        .domain([
-          // First and Last values on axis
-          // Five years before earliestYear
-          new Date(this.earliestYear().getTime() - 525600 * 60000 * 5),
-          this.latestYear(),
-        ])
-        .range([margin.top, margin.top + chartHeight]); // what values you want to pop out (y values)
+        .domain([this.earliestYear(), this.latestYear()])
+        .range([margin.top, margin.top + chartHeight]) // what values you want to pop out (y values)
+        .nice();
       let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
 
       // Draw timeline axis
@@ -253,16 +250,14 @@ export default {
       });
     },
     earliestYear() {
-      // TODO: Remove hard coding
-      return new Date(1853, 0, 0, 0);
+      // Hard coded so that timeline axis doesn't change upon group selection
+      return new Date(1821, 0, 0, 0);
     },
     latestYear() {
-      // TODO: Remove hard coding
-      return new Date(2021, 0, 0, 0);
+      return new Date(2019, 0, 0, 0);
     },
     maxPeoplePerCongress() {
-      // TODO: Remove hard coding
-      return 55;
+      return 105;
     },
   },
 };
