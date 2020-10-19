@@ -1,16 +1,18 @@
 <template>
   <div>
-    <label>
-      Choose a Minority Group to Show Their Representation in Congress
-    </label>
-    <b-form-select
-      v-model="group"
-      v-bind:options="groups"
-      v-on:change="fetchDataAndGenerateSVG($event, group)"
-      class="mx-3"
-    >
-    </b-form-select>
-    <div id="timeline"></div>
+    <b-container>
+      <label>
+        Choose a Minority Group to Show Their Representation in Congress
+      </label>
+      <b-form-select
+        v-model="group"
+        v-bind:options="groups"
+        v-on:change="fetchDataAndGenerateSVG($event, group)"
+        class="mx-3"
+      >
+      </b-form-select>
+      <div id="timeline"></div>
+    </b-container>
   </div>
 </template>
 
@@ -58,7 +60,7 @@ export default {
             StateOrTerritory: row.StateOrTerritory,
             Party: row.Party,
             Service: row.Service,
-            Group: row.Group,
+            MinorityGroup: row.MinorityGroup,
           });
         } else {
           // If byCongress doesn't have that congress yet
@@ -75,7 +77,7 @@ export default {
                 StateOrTerritory: row.StateOrTerritory,
                 Party: row.Party,
                 Service: row.Service,
-                Group: row.Group,
+                MinorityGroup: row.MinorityGroup,
               },
             ],
           });
@@ -91,10 +93,10 @@ export default {
         group,
         this.filterOutNonStates(this.filterOutSenate(data))
       );
+      // compute dataGroupedByCongress (based on this.dataToUse)
       this.generateSVG(this.dataGroupedByCongress);
     },
     generateSVG(dataToUse) {
-      console.log(dataToUse);
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
       const svgWidth = 450;
       const svgHeight = 950;
@@ -132,7 +134,7 @@ export default {
       // Setup x scale & axis
       let nScale = d3
         .scaleLinear()
-        .domain([0, this.maxPeoplePerCongress()])
+        .domain([0, this.maxPeoplePerCongress(dataToUse)])
         .range([margin.left, margin.left + chartWidth]);
 
       // Draw x axis
@@ -172,7 +174,8 @@ export default {
           return tlScale(new Date(parseInt(d.sessionBegan), 0, 0, 0));
         })
         .attr("cx", (d, i) => {
-          return nScale(i);
+          // Add 2 so that dots aren't bumping against timeline axis
+          return nScale(i) + 2;
         })
         .attr("r", radius)
         .style("fill", (d, i) => {
@@ -246,7 +249,7 @@ export default {
     },
     showOnlyGroup(group, data) {
       return data.filter((row) => {
-        return row.Group === group;
+        return row.MinorityGroup === group;
       });
     },
     earliestYear() {
@@ -256,8 +259,13 @@ export default {
     latestYear() {
       return new Date(2019, 0, 0, 0);
     },
-    maxPeoplePerCongress() {
-      return 105;
+    maxPeoplePerCongress(dataGroupedByCongressAndMinority) {
+      let congressWithMostGroups = dataGroupedByCongressAndMinority.reduce(
+        (prev, curr) => {
+          return prev > curr ? prev : curr;
+        }
+      );
+      return congressWithMostGroups.Members.length;
     },
   },
 };
