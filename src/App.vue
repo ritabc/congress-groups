@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <b-container class="pt-3">
-      <h3>{{ title }}</h3>
-      <sidebar></sidebar>
+      <sidebar v-bind:title="title"></sidebar>
       <timeline></timeline>
     </b-container>
   </div>

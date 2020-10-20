@@ -1,11 +1,11 @@
 <template>
   <div>
     <b-button v-b-toggle.sidebar-about>Toggle Site Information</b-button>
-    <b-sidebar id="sidebar-about" title="About This Site" width="375px">
+    <b-sidebar id="sidebar-about" v-bind:title="title" width="375px" visible>
       <div class="px-3 py-2">
         <p>
           The inspiration for this site came about while a friend and I were
-          reading and discussing Ibram X. Kendi's
+          reading Ibram X. Kendi's
           <a href="https://www.ibramxkendi.com/stamped">
             Stamped from the Beginning: The Definitive History of Racist Ideas
             in America</a
@@ -65,7 +65,7 @@
 <script>
 export default {
   name: "sidebar",
-  props: {},
+  props: { title: String },
 };
 </script>
 

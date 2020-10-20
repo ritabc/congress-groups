@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Timeline from './../components/timeline.vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+// import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 Vue.use(VueRouter)
-Vue.use(BootstrapVue)
-Vue.use(IconsPlugin)
+// Vue.use(BootstrapVue)
+// Vue.use(IconsPlugin)
 const routes = [
     // {
     //     path: '/timeline', component: Timeline
