@@ -1,9 +1,7 @@
 <template>
   <div>
     <b-container>
-      <label>
-        Choose a Minority Group to Show Their Representation in Congress
-      </label>
+      <label> Choose a Group to Show Their Representation in Congress </label>
       <b-form-select
         v-model="group"
         v-bind:options="groups"
@@ -92,6 +90,7 @@ export default {
       this.dataToUse = this.showOnlyGroup(
         group,
         this.filterOutNonStates(this.filterOutSenate(data))
+        // this.filterOutSenate(data)
       );
       // compute dataGroupedByCongress (based on this.dataToUse)
       this.generateSVG(this.dataGroupedByCongress);

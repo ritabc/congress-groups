@@ -1,18 +1,20 @@
 <template>
   <div id="app">
-    <h2>
-      {{ title }}
-    </h2>
-    <router-view></router-view>
+    <b-container class="pt-3">
+      <h3>{{ title }}</h3>
+      <sidebar></sidebar>
+      <timeline></timeline>
+    </b-container>
   </div>
 </template>
 
 <script>
+import sidebar from "./components/sidebar";
 import timeline from "./components/timeline";
 
-import * as d3 from "d3";
 export default {
   components: {
+    sidebar,
     timeline,
   },
   data() {
@@ -33,18 +35,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>
