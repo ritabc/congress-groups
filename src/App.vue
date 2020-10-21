@@ -12,7 +12,9 @@
         </b-navbar-nav>
       </b-navbar>
     </div>
-    <timeline></timeline>
+    <b-container>
+      <timeline></timeline>
+    </b-container>
   </div>
 </template>
 
@@ -55,7 +57,7 @@ export default {
 <style scoped>
 .wrapper {
   display: flex;
-  width: 100%;
+  width: 98%;
   align-items: stretch;
 }
 .sidebar {

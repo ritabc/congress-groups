@@ -1,13 +1,17 @@
 <template>
   <div class="py-2">
-    <label> Choose a Group to Show Their Representation in Congress </label>
-    <b-form-select
-      v-model="group"
-      v-bind:options="groups"
-      v-on:change="fetchDataAndGenerateSVG($event, group)"
-      class="mx-3"
-    >
-    </b-form-select>
+    <div class="float-right">
+      <div class="text-right">
+        <label> Choose a Group to Show Their Representation in Congress </label>
+      </div>
+      <b-form-select
+        v-model="group"
+        v-bind:options="groups"
+        v-on:change="fetchDataAndGenerateSVG($event, group)"
+        class="mx-3"
+      >
+      </b-form-select>
+    </div>
     <div id="timeline"></div>
   </div>
 </template>
@@ -88,6 +92,8 @@ export default {
       this.dataToUse = this.showOnlyGroup(
         group,
         this.filterOutNonStates(this.filterOutSenate(data))
+
+        // Can also include territories by replacing the line above with this:
         // this.filterOutSenate(data)
       );
       // compute dataGroupedByCongress (based on this.dataToUse)
@@ -95,7 +101,7 @@ export default {
     },
     generateSVG(dataToUse) {
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
-      const svgWidth = 450;
+      const svgWidth = 650;
       const svgHeight = 950;
       const radius = 3;
       const chartWidth = svgWidth - margin.left - margin.right;
@@ -131,7 +137,10 @@ export default {
       // Setup x scale & axis
       let nScale = d3
         .scaleLinear()
-        .domain([0, this.maxPeoplePerCongress(dataToUse)])
+        // .domain([0, this.maxPeoplePerCongress(dataToUse)])
+        // Hard code to be the highest frequency of people in a single congress across all groups (women)
+        // So that scale is the same across all groups
+        .domain([0, 105])
         .range([margin.left, margin.left + chartWidth]);
 
       // Draw x axis
@@ -174,7 +183,7 @@ export default {
           // Add 2 so that dots aren't bumping against timeline axis
           return nScale(i) + 2;
         })
-        .attr("r", radius)
+        .attr("r", radius - 0.5) // Subtract 0.5 to decrease the amount the dots run together
         .style("fill", (d, i) => {
           return oranges[i % 3];
         })
@@ -269,8 +278,8 @@ export default {
 </script>
 
 <style scoped>
-p.congress {
+/* p.congress {
   margin: 0%;
   font-size: 0.8em;
-}
+} */
 </style>
