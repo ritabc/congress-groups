@@ -1,6 +1,17 @@
 <template>
-  <div id="app" class="wrapper py-2 px-3">
-    <sidebar v-bind:title="title"></sidebar>
+  <div id="app" class="wrapper">
+    <div class="sidebar" v-bind:class="{ active: isActive }">
+      <sidebar v-bind:title="title"></sidebar>
+    </div>
+    <div>
+      <b-navbar>
+        <b-navbar-nav class="ml-auto">
+          <b-button variant="info" v-on:click="collapseSidebar()"
+            >Toggle Sidebar</b-button
+          >
+        </b-navbar-nav>
+      </b-navbar>
+    </div>
     <timeline></timeline>
   </div>
 </template>
@@ -18,9 +29,13 @@ export default {
   data() {
     return {
       title: "Minority Groups In Congresss",
-      congressMembersData: {},
-      dataReady: false,
+      isActive: false,
     };
+  },
+  methods: {
+    collapseSidebar() {
+      this.isActive = !this.isActive;
+    },
   },
 };
 </script>
@@ -42,5 +57,23 @@ export default {
   display: flex;
   width: 100%;
   align-items: stretch;
+}
+.sidebar {
+  min-width: 375px;
+  max-width: 375px;
+  min-height: 100vh;
+}
+
+.sidebar.active {
+  margin-left: -375px;
+}
+
+@media (max-width: 1000px) {
+  .sidebar {
+    margin-left: -375px;
+  }
+  .sidebar.active {
+    margin-left: 0;
+  }
 }
 </style>

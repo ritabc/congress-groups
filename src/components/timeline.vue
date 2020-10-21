@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="py-2">
     <label> Choose a Group to Show Their Representation in Congress </label>
     <b-form-select
       v-model="group"
