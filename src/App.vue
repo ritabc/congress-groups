@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <b-container class="pt-3">
-      <sidebar v-bind:title="title"></sidebar>
-      <timeline></timeline>
-    </b-container>
+  <div id="app" class="wrapper py-2 px-3">
+    <sidebar v-bind:title="title"></sidebar>
+    <timeline></timeline>
   </div>
 </template>
 
@@ -34,5 +32,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+</style>
+
+
+<style scoped>
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
 }
 </style>
