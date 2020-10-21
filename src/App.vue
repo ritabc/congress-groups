@@ -10,6 +10,7 @@ import sidebar from "./components/sidebar";
 import timeline from "./components/timeline";
 
 export default {
+  name: "app",
   components: {
     sidebar,
     timeline,

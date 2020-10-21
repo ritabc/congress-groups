@@ -1,16 +1,14 @@
 <template>
   <div>
-    <b-container>
-      <label> Choose a Group to Show Their Representation in Congress </label>
-      <b-form-select
-        v-model="group"
-        v-bind:options="groups"
-        v-on:change="fetchDataAndGenerateSVG($event, group)"
-        class="mx-3"
-      >
-      </b-form-select>
-      <div id="timeline"></div>
-    </b-container>
+    <label> Choose a Group to Show Their Representation in Congress </label>
+    <b-form-select
+      v-model="group"
+      v-bind:options="groups"
+      v-on:change="fetchDataAndGenerateSVG($event, group)"
+      class="mx-3"
+    >
+    </b-form-select>
+    <div id="timeline"></div>
   </div>
 </template>
 
