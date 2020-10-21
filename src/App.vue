@@ -4,7 +4,7 @@
       <sidebar v-bind:title="title"></sidebar>
     </div>
     <div>
-      <b-navbar>
+      <b-navbar class="toggle-button">
         <b-navbar-nav class="ml-auto">
           <b-button variant="info" v-on:click="collapseSidebar()"
             >Toggle Sidebar</b-button
@@ -64,6 +64,7 @@ export default {
   min-width: 375px;
   max-width: 375px;
   min-height: 100vh;
+  background-color: #d4f9f8;
 }
 
 .sidebar.active {
@@ -77,5 +78,9 @@ export default {
   .sidebar.active {
     margin-left: 0;
   }
+}
+.toggle-button {
+  background-color: #d4f9f8;
+  border-radius: 0 0 10px 0;
 }
 </style>

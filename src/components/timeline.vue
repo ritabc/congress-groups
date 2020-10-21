@@ -1,8 +1,8 @@
 <template>
   <div class="py-2">
-    <div class="float-right">
+    <div class="float-right chart-options">
       <div class="text-right">
-        <label> Choose a Group to Show Their Representation in Congress </label>
+        <label>Choose a Group to Show Their Representation in Congress</label>
       </div>
       <b-form-select
         v-model="group"
@@ -11,6 +11,15 @@
         class="mx-3"
       >
       </b-form-select>
+      <b-form-checkbox
+        id="party-checkbox"
+        class="my-2 float-right"
+        v-model="showParty"
+        name="party-checkbox"
+        v-on:change="fetchDataAndGenerateSVG($event, group)"
+        >Show Distinction By Party</b-form-checkbox
+      >
+      <div v-if="showParty"></div>
     </div>
     <div id="timeline"></div>
   </div>
@@ -25,6 +34,7 @@ export default {
       msg: "Message in Timeline",
       dataToUse: {},
       group: null,
+      showParty: false,
       groups: [
         {
           value: null,
@@ -107,6 +117,9 @@ export default {
       const chartWidth = svgWidth - margin.left - margin.right;
       const chartHeight = svgHeight - margin.top - margin.bottom;
       const oranges = ["#f0a150", "#f48020", "#c76706"];
+      const republican = "#cc0000";
+      const democrat = "#4e4eff";
+      const otherParty = "#9932CC";
 
       // Remove any svg's with .chart that already exist
       d3.selectAll(".chart").remove();
@@ -164,7 +177,7 @@ export default {
         .selectAll("circle")
         // d is each session's data (with congress info, year info, and list of members)
         .data((d) =>
-          d.Members.map((member) => {
+          d.Members.sort(this.compareParty).map((member) => {
             return {
               congress: d.Congress,
               yearRange: d.YearRange,
@@ -185,7 +198,17 @@ export default {
         })
         .attr("r", radius - 0.5) // Subtract 0.5 to decrease the amount the dots run together
         .style("fill", (d, i) => {
-          return oranges[i % 3];
+          if (this.showParty) {
+            if (d.member.Party === "Democrat") {
+              return democrat;
+            } else if (d.member.Party === "Republican") {
+              return republican;
+            } else {
+              return otherParty;
+            }
+          } else {
+            return oranges[i % 3];
+          }
         })
         .attr("transform", `translate(${radius}, 0)`);
     },
@@ -273,13 +296,22 @@ export default {
       );
       return congressWithMostGroups.Members.length;
     },
+    compareParty(a, b) {
+      if (a.Party === "Republican") {
+        return -1;
+      } else if (a.Party === "Democrat") {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-/* p.congress {
-  margin: 0%;
-  font-size: 0.8em;
-} */
+.chart-options {
+  position: absolute;
+  right: 50px;
+}
 </style>
