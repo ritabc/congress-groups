@@ -11,17 +11,43 @@
         </b-form-select>
       </b-col>
     </b-row>
-    <div class="float-right chart-options">
-      <b-form-checkbox
-        id="party-checkbox"
-        class="my-2 float-right"
-        v-model="showParty"
-        name="party-checkbox"
-        v-on:change="fetchDataAndGenerateSVG($event, group)"
-        >Show Distinction By Party</b-form-checkbox
-      >
-      <div v-if="showParty"></div>
-    </div>
+    <b-row class="float-right chart-options pt-3">
+      <b-col>
+        <b-form-checkbox
+          id="party-checkbox"
+          class="my-2 float-right"
+          v-model="showParty"
+          name="party-checkbox"
+          v-on:change="fetchDataAndGenerateSVG($event, group)"
+          >Show Distinction By Party</b-form-checkbox
+        >
+        <div v-if="showParty" id="party-legend">
+          <svg id="partyLegend" width="200" height="100">
+            <circle
+              r="6"
+              v-bind:style="{ fill: republican }"
+              cx="50"
+              cy="25"
+            ></circle>
+            <text x="65" y="30">Repbulican</text>
+            <circle
+              r="6"
+              v-bind:style="{ fill: democrat }"
+              cx="50"
+              cy="50"
+            ></circle>
+            <text x="65" y="55">Democrat</text>
+            <circle
+              r="6"
+              v-bind:style="{ fill: otherParty }"
+              cx="50"
+              cy="75"
+            ></circle>
+            <text x="65" y="80">Another Party</text>
+          </svg>
+        </div>
+      </b-col>
+    </b-row>
     <div id="timeline"></div>
   </div>
 </template>
@@ -49,6 +75,9 @@ export default {
           text: "Show Asian Pacific Islander Americans In Congress",
         },
       ],
+      republican: "#cc0000",
+      democrat: "#4e4eff",
+      otherParty: "#FF00FF",
     };
   },
   mounted() {
@@ -102,9 +131,6 @@ export default {
   },
   methods: {
     async fetchDataAndGenerateSVG(event, group) {
-      if (group === null) {
-        return;
-      }
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
       this.dataToUse = this.showOnlyGroup(
         group,
@@ -117,6 +143,13 @@ export default {
       this.generateSVG(this.dataGroupedByCongress);
     },
     generateSVG(dataToUse) {
+      // Remove any svg's with .chart that already exist
+      d3.selectAll(".chart").remove();
+
+      if (dataToUse.length === 0) {
+        return;
+      }
+
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
       const svgWidth = 650;
       const radius = 3;
@@ -124,12 +157,6 @@ export default {
       const chartWidth = svgWidth - margin.left - margin.right;
       const chartHeight = svgHeight - margin.top - margin.bottom;
       const oranges = ["#f0a150", "#f48020", "#c76706"];
-      const republican = "#cc0000";
-      const democrat = "#4e4eff";
-      const otherParty = "#FF00FF";
-
-      // Remove any svg's with .chart that already exist
-      d3.selectAll(".chart").remove();
 
       // Setup svg
       const svg = d3
@@ -179,6 +206,8 @@ export default {
         .append("g")
         .attr("class", "congress-session");
 
+      console.log(this.showParty);
+
       // To .congress-session, add a circle
       congressSessions
         .selectAll("circle")
@@ -207,11 +236,11 @@ export default {
         .style("fill", (d, i) => {
           if (this.showParty) {
             if (d.member.Party === "Democrat") {
-              return democrat;
+              return this.democrat;
             } else if (d.member.Party === "Republican") {
-              return republican;
+              return this.republican;
             } else {
-              return otherParty;
+              return this.otherParty;
             }
           } else {
             return oranges[i % 3];
