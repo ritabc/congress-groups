@@ -83,4 +83,8 @@ export default {
   background-color: #d4f9f8;
   border-radius: 0 0 10px 0;
 }
+
+.toggle-button button {
+  max-width: 80px;
+}
 </style>

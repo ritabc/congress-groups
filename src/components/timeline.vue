@@ -119,7 +119,7 @@ export default {
       const oranges = ["#f0a150", "#f48020", "#c76706"];
       const republican = "#cc0000";
       const democrat = "#4e4eff";
-      const otherParty = "#9932CC";
+      const otherParty = "#FF00FF";
 
       // Remove any svg's with .chart that already exist
       d3.selectAll(".chart").remove();
@@ -297,13 +297,24 @@ export default {
       return congressWithMostGroups.Members.length;
     },
     compareParty(a, b) {
-      if (a.Party === "Republican") {
-        return -1;
-      } else if (a.Party === "Democrat") {
-        return 1;
-      } else {
-        return 0;
+      let partyA = a.Party.toUpperCase();
+      let partyB = b.Party.toUpperCase();
+
+      // Within this function, treat anyone outside republican & democrat parties as 'AnotherParty' so they'll always appear first
+      if (partyA !== "REPUBLICAN" && partyA !== "DEMOCRAT") {
+        partyA = "ANOTHER PARTY";
       }
+      if (partyB !== "REPUBLICAN" && partyB !== "DEMOCRAT") {
+        partyB = "ANOTHER PARTY";
+      }
+
+      if (partyA < partyB) {
+        return 1;
+      }
+      if (partyA > partyB) {
+        return -1;
+      }
+      return 0;
     },
   },
 };

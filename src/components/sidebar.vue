@@ -17,9 +17,9 @@
       >.
     </p>
     <p>
-      With this site, I wanted to visualize the period during and directly after
-      Reconstruction, when Black Americans were first able to participate in
-      politics, and were then later denied access through poll taxes & voting
+      With this site, I wanted to visualize the Reconstruction Era and the years
+      directly following it, when Black Americans were first able to participate
+      in politics, and were then later denied access through poll taxes & voting
       literacy tests.
     </p>
     <p>
