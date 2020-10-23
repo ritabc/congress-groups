@@ -112,8 +112,8 @@ export default {
     generateSVG(dataToUse) {
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
       const svgWidth = 650;
-      const svgHeight = 950;
       const radius = 3;
+      const svgHeight = this.yearsSpan(dataToUse) * (radius + 2);
       const chartWidth = svgWidth - margin.left - margin.right;
       const chartHeight = svgHeight - margin.top - margin.bottom;
       const oranges = ["#f0a150", "#f48020", "#c76706"];
@@ -135,7 +135,7 @@ export default {
       // Setup timeline scale and (y) axis
       let tlScale = d3
         .scaleTime()
-        .domain([this.earliestYear(), this.latestYear()])
+        .domain([this.earliestYear(dataToUse), this.latestYear()])
         .range([margin.top, margin.top + chartHeight]) // what values you want to pop out (y values)
         .nice();
       let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
@@ -281,9 +281,9 @@ export default {
         return row.MinorityGroup === group;
       });
     },
-    earliestYear() {
-      // Hard coded so that timeline axis doesn't change upon group selection
-      return new Date(1821, 0, 0, 0);
+    earliestYear(groupData) {
+      // groupData will be sorted already
+      return new Date(groupData[0]["SessionBegan"], 0, 0, 0);
     },
     latestYear() {
       return new Date(2019, 0, 0, 0);
@@ -315,6 +315,12 @@ export default {
         return -1;
       }
       return 0;
+    },
+    yearsSpan(data) {
+      const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.24;
+      return Math.floor(
+        (this.latestYear() - this.earliestYear(data)) / MS_PER_YEAR
+      );
     },
   },
 };
