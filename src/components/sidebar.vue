@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
     <p>
       The data for this project comes from
-      <a href="history.house.gov">history.house.gov</a>, which provides
+      <a href="https://history.house.gov">history.house.gov</a>, which provides
       historical data on minority groups serving in congress, including Black
       Americans, Women, Hispanic Americans, and Asian/Pacific Islander
       Americans.

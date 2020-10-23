@@ -74,6 +74,9 @@ export default {
   .sidebar.active {
     margin-left: -375px;
   }
+  .sidebar {
+    margin-left: 0;
+  }
 }
 .toggle-button {
   background-color: lightsteelblue;

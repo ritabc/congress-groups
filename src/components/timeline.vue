@@ -203,8 +203,6 @@ export default {
         .append("g")
         .attr("class", "congress-session");
 
-      console.log(this.showParty);
-
       // To .congress-session, add a circle
       congressSessions
         .selectAll("circle")
