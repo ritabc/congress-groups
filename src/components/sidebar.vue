@@ -24,8 +24,8 @@
     </p>
     <p>
       This history is important to visualize and understand, as it runs counter
-      to the popular idea that Black/White race relations are continuosly
-      improving in our country.
+      to the popular idea that Black/White race relations have always been
+      continuosly improving in our country.
     </p>
     <p>
       I was also interested in answering the question: When did the majority of

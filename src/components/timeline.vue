@@ -1,16 +1,17 @@
 <template>
   <div class="py-2">
+    <b-row class="tl-header">
+      <b-col offset-lg="3" lg="7">
+        <b-form-select
+          v-model="group"
+          v-bind:options="groups"
+          v-on:change="fetchDataAndGenerateSVG($event, group)"
+          class="mx-3"
+        >
+        </b-form-select>
+      </b-col>
+    </b-row>
     <div class="float-right chart-options">
-      <div class="text-right">
-        <label>Choose a Group to Show Their Representation in Congress</label>
-      </div>
-      <b-form-select
-        v-model="group"
-        v-bind:options="groups"
-        v-on:change="fetchDataAndGenerateSVG($event, group)"
-        class="mx-3"
-      >
-      </b-form-select>
       <b-form-checkbox
         id="party-checkbox"
         class="my-2 float-right"
@@ -38,12 +39,15 @@ export default {
       groups: [
         {
           value: null,
-          text: "Choose a Group",
+          text: "Select A Group To Show Their Representation In Congress",
         },
-        { value: "Black", text: "Black Americans" },
-        { value: "Women", text: "Female Americans" },
-        { value: "Hispanic", text: "Hispanic Americans" },
-        { value: "APA", text: "Asian Pacific Americans" },
+        { value: "Black", text: "Show Black Americans In Congress" },
+        { value: "Women", text: "Show Female Americans In Congress" },
+        { value: "Hispanic", text: "Show Hispanic Americans In Congress" },
+        {
+          value: "APA",
+          text: "Show Asian Pacific Islander Americans In Congress",
+        },
       ],
     };
   },
@@ -98,6 +102,9 @@ export default {
   },
   methods: {
     async fetchDataAndGenerateSVG(event, group) {
+      if (group === null) {
+        return;
+      }
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
       this.dataToUse = this.showOnlyGroup(
         group,
