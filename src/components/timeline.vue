@@ -1,11 +1,11 @@
 <template>
-  <div class="py-2">
-    <b-row class="tl-header">
+  <b-container fluid>
+    <b-row class="tl-header py-2">
       <b-col offset-lg="3" lg="7">
         <b-form-select
           v-model="group"
           v-bind:options="groups"
-          v-on:change="fetchDataAndGenerateSVG($event, group)"
+          v-on:change="fetchDataAndGenerateSVG(group)"
           class="mx-3"
         >
         </b-form-select>
@@ -18,7 +18,7 @@
           class="my-2 float-right"
           v-model="showParty"
           name="party-checkbox"
-          v-on:change="fetchDataAndGenerateSVG($event, group)"
+          v-on:change="fetchDataAndGenerateSVG(group)"
           >Show Distinction By Party</b-form-checkbox
         >
         <div v-if="showParty" id="party-legend">
@@ -49,7 +49,7 @@
       </b-col>
     </b-row>
     <div id="timeline"></div>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -60,25 +60,25 @@ export default {
     return {
       msg: "Message in Timeline",
       dataToUse: {},
-      group: null,
+      group: "Black",
       showParty: false,
       groups: [
-        {
-          value: null,
-          text: "Select A Group To Show Their Representation In Congress",
-        },
-        { value: "Black", text: "Show Black Americans In Congress" },
-        { value: "Women", text: "Show Female Americans In Congress" },
-        { value: "Hispanic", text: "Show Hispanic Americans In Congress" },
+        { value: "Black", text: "Showing Black Americans In Congress" },
+        { value: "Women", text: "Showing Female Americans In Congress" },
+        { value: "Hispanic", text: "Showing Hispanic Americans In Congress" },
         {
           value: "APA",
-          text: "Show Asian Pacific Islander Americans In Congress",
+          text: "Showing Asian Pacific Islander Americans In Congress",
         },
       ],
       republican: "#cc0000",
       democrat: "#4e4eff",
       otherParty: "#FF00FF",
     };
+  },
+  mounted() {
+    this.fetchDataAndGenerateSVG("Black");
+    this.group = "Black";
   },
   computed: {
     dataGroupedByCongress: function () {
@@ -127,7 +127,7 @@ export default {
     },
   },
   methods: {
-    async fetchDataAndGenerateSVG(event, group) {
+    async fetchDataAndGenerateSVG(group) {
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
       this.dataToUse = this.showOnlyGroup(
         group,
@@ -363,5 +363,8 @@ export default {
 .chart-options {
   position: absolute;
   right: 50px;
+}
+.tl-header {
+  background-color: steelblue;
 }
 </style>

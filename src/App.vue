@@ -12,9 +12,7 @@
         </b-navbar-nav>
       </b-navbar>
     </div>
-    <b-container>
-      <timeline></timeline>
-    </b-container>
+    <timeline></timeline>
   </div>
 </template>
 
@@ -31,7 +29,7 @@ export default {
   data() {
     return {
       title: "Minority Groups In Congresss",
-      isActive: false,
+      isActive: true,
     };
   },
   methods: {
@@ -64,23 +62,21 @@ export default {
   min-width: 375px;
   max-width: 375px;
   min-height: 100vh;
-  background-color: #d4f7f9;
-}
-
-.sidebar.active {
+  background-color: lightsteelblue;
   margin-left: -375px;
 }
 
+.sidebar.active {
+  margin-left: 0;
+}
+
 @media (max-width: 1000px) {
-  .sidebar {
-    margin-left: -375px;
-  }
   .sidebar.active {
-    margin-left: 0;
+    margin-left: -375px;
   }
 }
 .toggle-button {
-  background-color: #d4f7f9;
+  background-color: lightsteelblue;
   border-radius: 0 0 10px 0;
 }
 
