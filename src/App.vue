@@ -64,7 +64,7 @@ export default {
   min-width: 375px;
   max-width: 375px;
   min-height: 100vh;
-  background-color: #d4f9f8;
+  background-color: #d4f7f9;
 }
 
 .sidebar.active {
@@ -80,7 +80,7 @@ export default {
   }
 }
 .toggle-button {
-  background-color: #d4f9f8;
+  background-color: #d4f7f9;
   border-radius: 0 0 10px 0;
 }
 

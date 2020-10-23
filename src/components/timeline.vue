@@ -11,7 +11,7 @@
         </b-form-select>
       </b-col>
     </b-row>
-    <b-row class="float-right chart-options pt-3">
+    <b-row class="float-right chart-options pt-4">
       <b-col>
         <b-form-checkbox
           id="party-checkbox"
@@ -79,9 +79,6 @@ export default {
       democrat: "#4e4eff",
       otherParty: "#FF00FF",
     };
-  },
-  mounted() {
-    // this.fetchDataAndGenerateSVG();
   },
   computed: {
     dataGroupedByCongress: function () {
