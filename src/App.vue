@@ -12,7 +12,8 @@
         </b-navbar-nav>
       </b-navbar>
     </div>
-    <timeline></timeline>
+    <!-- If showing sidebar, push chart Options to the Right -->
+    <timeline v-bind:pushChartOptionsRight="showSidebar"></timeline>
   </div>
 </template>
 
@@ -29,12 +30,13 @@ export default {
   data() {
     return {
       title: "Minority Groups In Congresss",
-      showSidebar: true,
+      showSidebar: false,
       windowWidth: window.innerWidth,
     };
   },
   watch: {
     windowWidth(newWidth, oldWidth) {
+      // Only show sidebar if page is wide
       this.showSidebar = newWidth > 1000;
     },
   },

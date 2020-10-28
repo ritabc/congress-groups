@@ -11,11 +11,14 @@
         </b-form-select>
       </b-col>
     </b-row>
-    <b-row class="float-right chart-options pt-4">
+    <b-row
+      class="chart-options pt-4"
+      v-bind:class="{ pushOver: pushChartOptionsRight }"
+    >
       <b-col>
         <b-form-checkbox
           id="party-checkbox"
-          class="my-2 float-right"
+          class="my-2"
           v-model="showParty"
           name="party-checkbox"
           v-on:change="fetchDataAndGenerateSVG(group)"
@@ -48,7 +51,7 @@
         </div>
       </b-col>
     </b-row>
-    <div id="timeline"></div>
+    <div id="timeline" class="svg-container"></div>
   </b-container>
 </template>
 
@@ -75,6 +78,9 @@ export default {
       democrat: "#4e4eff",
       otherParty: "#FF00FF",
     };
+  },
+  props: {
+    pushChartOptionsRight: Boolean,
   },
   mounted() {
     this.fetchDataAndGenerateSVG("Black");
@@ -161,7 +167,8 @@ export default {
         .append("svg")
         .attr("class", "chart")
         .attr("width", svgWidth)
-        .attr("height", svgHeight);
+        .attr("height", svgHeight)
+        .attr("preserveAspectRation", "xMinYMin meet");
 
       // Setup timeline scale and (y) axis
       let tlScale = d3
@@ -361,8 +368,27 @@ export default {
 .chart-options {
   position: absolute;
   right: 50px;
+  z-index: 5;
 }
+
+@media screen and (max-width: 500px) {
+  .chart-options {
+    right: -20px;
+  }
+  .pushOver {
+    right: 10px;
+    position: fixed;
+  }
+}
+
 .tl-header {
   background-color: steelblue;
+}
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  vertical-align: middle;
+  overflow: hidden;
 }
 </style>
