@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="wrapper">
-    <div class="sidebar" v-bind:class="{ active: isActive }">
+    <div class="sidebar" v-bind:class="{ active: showSidebar }">
       <sidebar v-bind:title="title"></sidebar>
     </div>
     <div>
@@ -29,12 +29,29 @@ export default {
   data() {
     return {
       title: "Minority Groups In Congresss",
-      isActive: true,
+      showSidebar: true,
+      windowWidth: window.innerWidth,
     };
+  },
+  watch: {
+    windowWidth(newWidth, oldWidth) {
+      this.showSidebar = newWidth > 1000;
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", this.onResize);
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResize);
   },
   methods: {
     collapseSidebar() {
-      this.isActive = !this.isActive;
+      this.showSidebar = !this.showSidebar;
+    },
+    onResize() {
+      this.windowWidth = window.innerWidth;
     },
   },
 };
@@ -70,14 +87,16 @@ export default {
   margin-left: 0;
 }
 
-@media (max-width: 1000px) {
+/* The following media query is buggy in that it does the opposite of desired functionality when closing the Sidebar, then making the screen less small. Use watcher and nextTick() instead */
+/* @media (max-width: 1000px) {
   .sidebar.active {
     margin-left: -375px;
   }
   .sidebar {
     margin-left: 0;
   }
-}
+} */
+
 .toggle-button {
   background-color: lightsteelblue;
   border-radius: 0 0 10px 0;
