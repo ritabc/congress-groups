@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import * as d3 from "d3";
+import d3 from "./../d3Importer";
 export default {
   name: "timeline",
   data() {
@@ -87,7 +87,7 @@ export default {
     this.group = "Black";
   },
   computed: {
-    dataGroupedByCongress: function () {
+    dataGroupedByCongress: function() {
       // transform data from:
       // [{congress: 56, yearRange: (1985-1938), person: ABC...}, {congress: 56, yearRange: (1985-1938), person: DEF...} ]
       // to
