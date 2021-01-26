@@ -57,6 +57,9 @@
 
 <script>
 import d3 from "./../d3Importer";
+
+const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.24;
+
 export default {
   name: "timeline",
   data() {
@@ -156,7 +159,7 @@ export default {
       const margin = { top: 30, right: 10, bottom: 30, left: 35 };
       const svgWidth = 650;
       const radius = 3;
-      const svgHeight = this.yearsSpan(dataToUse) * (radius + 2);
+      const svgHeight = this.completeSpan() * (radius + 2);
       const chartWidth = svgWidth - margin.left - margin.right;
       const chartHeight = svgHeight - margin.top - margin.bottom;
       const oranges = ["#f0a150", "#f48020", "#c76706"];
@@ -173,7 +176,7 @@ export default {
       // Setup timeline scale and (y) axis
       let tlScale = d3
         .scaleTime()
-        .domain([this.earliestYear(dataToUse), this.latestYear()])
+        .domain([this.earliestYear(), this.latestYear()])
         .range([margin.top, margin.top + chartHeight]) // what values you want to pop out (y values)
         .nice();
       let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
@@ -319,9 +322,8 @@ export default {
         return row.MinorityGroup === group;
       });
     },
-    earliestYear(groupData) {
-      // groupData will be sorted already
-      return new Date(groupData[0]["SessionBegan"], 0, 0, 0);
+    earliestYear() {
+      return new Date(1821, 0, 0, 0);
     },
     latestYear() {
       return new Date(2019, 0, 0, 0);
@@ -354,11 +356,13 @@ export default {
       }
       return 0;
     },
-    yearsSpan(data) {
-      const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.24;
+    yearsSpan() {
       return Math.floor(
-        (this.latestYear() - this.earliestYear(data)) / MS_PER_YEAR
+        (this.latestYear() - this.earliestYear()) / MS_PER_YEAR
       );
+    },
+    completeSpan() {
+      return Math.floor(this.latestYear() - this.earliestYear()) / MS_PER_YEAR;
     },
   },
 };
