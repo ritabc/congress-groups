@@ -5,7 +5,7 @@
         <b-form-select
           v-model="group"
           v-bind:options="groups"
-          v-on:change="fetchFilterDataGenerateSvg(group)"
+          v-on:change="filterDataGenerateSvg(group)"
           class="mx-3"
         >
         </b-form-select>
@@ -21,7 +21,7 @@
           class="my-2"
           v-model="showParty"
           name="party-checkbox"
-          v-on:change="fetchFilterDataGenerateSvg(group)"
+          v-on:change="filterDataGenerateSvg(group)"
           >Show Distinction By Party</b-form-checkbox
         >
         <div v-if="showParty" id="party-legend">
@@ -84,9 +84,10 @@ export default {
   },
   props: {
     pushChartOptionsRight: Boolean,
+    completeDataSet: Array,
   },
   mounted() {
-    this.fetchFilterDataGenerateSvg("Black");
+    this.filterDataGenerateSvg("Black");
   },
   computed: {
     dataGroupedBySession: function() {
@@ -135,11 +136,10 @@ export default {
     },
   },
   methods: {
-    async fetchFilterDataGenerateSvg(group) {
-      let allData = await d3.csv("./data/minorityGroupCongressMembers.csv");
+    filterDataGenerateSvg(group) {
       this.filteredData = this.showOnlyGroup(
         group,
-        this.filterOutNonStates(this.filterOutSenate(allData))
+        this.filterOutNonStates(this.filterOutSenate(this.completeDataSet))
 
         // Can also include territories by replacing the line above with this:
         // this.filterOutSenate(allData)

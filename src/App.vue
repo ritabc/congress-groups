@@ -13,13 +13,18 @@
       </b-navbar>
     </div>
     <!-- If showing sidebar, push chart Options to the Right -->
-    <timeline v-bind:pushChartOptionsRight="showSidebar"></timeline>
+    <timeline
+      v-if="dataIsReady"
+      v-bind:pushChartOptionsRight="showSidebar"
+      v-bind:completeDataSet="allData"
+    ></timeline>
   </div>
 </template>
 
 <script>
 import sidebar from "./components/sidebar";
 import timeline from "./components/timeline";
+import d3 from "./d3Importer";
 
 export default {
   name: "app",
@@ -32,6 +37,8 @@ export default {
       title: "Minority Groups In Congresss",
       showSidebar: false,
       windowWidth: window.innerWidth,
+      allData: [],
+      dataIsReady: false,
     };
   },
   watch: {
@@ -41,6 +48,7 @@ export default {
     },
   },
   mounted() {
+    this.fetchData();
     this.$nextTick(() => {
       window.addEventListener("resize", this.onResize);
     });
@@ -54,6 +62,11 @@ export default {
     },
     onResize() {
       this.windowWidth = window.innerWidth;
+    },
+    async fetchData() {
+      let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
+      this.allData = data;
+      this.dataIsReady = true;
     },
   },
 };
