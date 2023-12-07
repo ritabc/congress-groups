@@ -5,7 +5,7 @@
         <b-form-select
           v-model="group"
           v-bind:options="groups"
-          v-on:change="fetchDataAndGenerateSVG(group)"
+          v-on:change="fetchFilterDataGenerateSvg(group)"
           class="mx-3"
         >
         </b-form-select>
@@ -21,7 +21,7 @@
           class="my-2"
           v-model="showParty"
           name="party-checkbox"
-          v-on:change="fetchDataAndGenerateSVG(group)"
+          v-on:change="fetchFilterDataGenerateSvg(group)"
           >Show Distinction By Party</b-form-checkbox
         >
         <div v-if="showParty" id="party-legend">
@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       msg: "Message in Timeline",
-      dataToUse: {},
+      filteredData: {},
       group: "Black",
       showParty: false,
       groups: [
@@ -86,20 +86,19 @@ export default {
     pushChartOptionsRight: Boolean,
   },
   mounted() {
-    this.fetchDataAndGenerateSVG("Black");
-    this.group = "Black";
+    this.fetchFilterDataGenerateSvg("Black");
   },
   computed: {
-    dataGroupedByCongress: function() {
+    dataGroupedBySession: function() {
       // transform data from:
       // [{congress: 56, yearRange: (1985-1938), person: ABC...}, {congress: 56, yearRange: (1985-1938), person: DEF...} ]
       // to
       // [{congres: 56, yearRange: (1985-1938), people: [ABC, DEF...],...}}]
-      let byCongress = [];
-      this.dataToUse.forEach((row) => {
-        if (byCongress.some((c) => c.Congress === row.Congress)) {
-          // We already have that congress in byCongress
-          let relevantCongress = byCongress.find((c) => {
+      let bySession = [];
+      this.filteredData.forEach((row) => {
+        if (bySession.some((c) => c.Congress === row.Congress)) {
+          // We already have that congress in bySession
+          let relevantCongress = bySession.find((c) => {
             return c.Congress === row.Congress;
           });
           relevantCongress.Members.push({
@@ -112,8 +111,8 @@ export default {
             MinorityGroup: row.MinorityGroup,
           });
         } else {
-          // If byCongress doesn't have that congress yet
-          byCongress.push({
+          // If bySession doesn't have that congress yet
+          bySession.push({
             Congress: row.Congress,
             YearRange: row.YearRange,
             SessionBegan: row.SessionBegan,
@@ -132,21 +131,21 @@ export default {
           });
         }
       });
-      return byCongress;
+      return bySession;
     },
   },
   methods: {
-    async fetchDataAndGenerateSVG(group) {
-      let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
-      this.dataToUse = this.showOnlyGroup(
+    async fetchFilterDataGenerateSvg(group) {
+      let allData = await d3.csv("./data/minorityGroupCongressMembers.csv");
+      this.filteredData = this.showOnlyGroup(
         group,
-        this.filterOutNonStates(this.filterOutSenate(data))
+        this.filterOutNonStates(this.filterOutSenate(allData))
 
         // Can also include territories by replacing the line above with this:
-        // this.filterOutSenate(data)
+        // this.filterOutSenate(allData)
       );
-      // compute dataGroupedByCongress (based on this.dataToUse)
-      this.generateSVG(this.dataGroupedByCongress);
+      // compute dataGroupedBySession which will be based on this.filteredData
+      this.generateSVG(this.dataGroupedBySession);
     },
     generateSVG(dataToUse) {
       // Remove any svg's with .chart that already exist
@@ -237,7 +236,7 @@ export default {
           // Add 2 so that dots aren't bumping against timeline axis
           return nScale(i) + 2;
         })
-        .attr("r", radius - 0.5) // Subtract 0.5 to decrease the amount the dots run together
+        .attr("r", radius - 0.5) // Subtract 0.5 to decrease the amount that dots run together
         .style("fill", (d, i) => {
           if (this.showParty) {
             if (d.member.Party === "Democrat") {
