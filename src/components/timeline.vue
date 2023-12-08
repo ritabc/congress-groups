@@ -5,7 +5,7 @@
         <b-form-select
           v-model="group"
           v-bind:options="groups"
-          v-on:change="filterDataGenerateSvg(group)"
+          v-on:change="filterDataRerender(group)"
           class="mx-3"
         >
         </b-form-select>
@@ -19,9 +19,9 @@
         <b-form-checkbox
           id="party-checkbox"
           class="my-2"
-          v-model="showParty"
           name="party-checkbox"
-          v-on:change="filterDataGenerateSvg(group)"
+          v-bind:showParty="false"
+          v-on:change="updateShowPartyRerender"
           >Show Distinction By Party</b-form-checkbox
         >
         <div v-if="showParty" id="party-legend">
@@ -87,7 +87,7 @@ export default {
     completeDataSet: Array,
   },
   mounted() {
-    this.filterDataGenerateSvg("Black");
+    this.filterDataRerender("Black");
   },
   computed: {
     dataGroupedBySession: function() {
@@ -136,7 +136,11 @@ export default {
     },
   },
   methods: {
-    filterDataGenerateSvg(group) {
+    updateShowPartyRerender(event) {
+      this.showParty = event;
+      this.generateSVG(this.dataGroupedBySession);
+    },
+    filterDataRerender(group) {
       this.filteredData = this.showOnlyGroup(
         group,
         this.filterOutNonStates(this.filterOutSenate(this.completeDataSet))
