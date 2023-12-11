@@ -2,13 +2,9 @@
   <b-container fluid>
     <b-row class="tl-header py-2">
       <b-col offset-lg="3" lg="7">
-        <b-form-select
-          v-model="group"
-          v-bind:options="groups"
-          v-on:change="filterDataRerender(group)"
-          class="mx-3"
-        >
-        </b-form-select>
+        <minority-group-selector
+          v-on:group-changed="filterDataRerender"
+        ></minority-group-selector>
       </b-col>
     </b-row>
     <b-row
@@ -58,25 +54,19 @@
 <script>
 import d3 from "./../d3Importer";
 import filter from "../filter";
+import MinorityGroupSelector from "./MinorityGroupSelector.vue";
 const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.24;
 
 export default {
   name: "timeline",
+  components: {
+    MinorityGroupSelector,
+  },
   data() {
     return {
       msg: "Message in Timeline",
       filteredData: {},
-      group: "Black",
       showParty: false,
-      groups: [
-        { value: "Black", text: "Showing Black Americans In Congress" },
-        { value: "Women", text: "Showing Female Americans In Congress" },
-        { value: "Hispanic", text: "Showing Hispanic Americans In Congress" },
-        {
-          value: "APA",
-          text: "Showing Asian Pacific Islander Americans In Congress",
-        },
-      ],
       republican: "#cc0000",
       democrat: "#4e4eff",
       otherParty: "#FF00FF",
