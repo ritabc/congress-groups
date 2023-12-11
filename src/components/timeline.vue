@@ -153,7 +153,7 @@ export default {
     },
     generateSVG(dataToUse) {
       // Remove any svg's with .chart that already exist
-      d3.selectAll(".chart").remove();
+      d3.selectAll(".graph").remove();
 
       if (dataToUse.length === 0) {
         return;
@@ -163,24 +163,24 @@ export default {
       const svgWidth = 650;
       const radius = 3;
       const svgHeight = this.completeSpan() * (radius + 2);
-      const chartWidth = svgWidth - margin.left - margin.right;
-      const chartHeight = svgHeight - margin.top - margin.bottom;
+      const graphWidth = svgWidth - margin.left - margin.right;
+      const graphHeight = svgHeight - margin.top - margin.bottom;
       const oranges = ["#f0a150", "#f48020", "#c76706"];
 
       // Setup svg
       const svg = d3
         .select("#timeline")
         .append("svg")
-        .attr("class", "chart")
+        .attr("class", "graph")
         .attr("width", svgWidth)
         .attr("height", svgHeight)
-        .attr("preserveAspectRation", "xMinYMin meet");
+        .attr("preserveAspectRatio", "xMinYMin meet");
 
       // Setup timeline scale and (y) axis
       let tlScale = d3
         .scaleTime()
         .domain([this.earliestYear(), this.latestYear()])
-        .range([margin.top, margin.top + chartHeight]) // what values you want to pop out (y values)
+        .range([margin.top, margin.top + graphHeight]) // what values you want to pop out (y values)
         .nice();
       let tlAxis = d3.axisLeft(tlScale).ticks(15); // Can change to ticks every 5 years by ".ticks(30)"
 
@@ -198,14 +198,14 @@ export default {
         // Hard code to be the highest frequency of people in a single congress across all groups (women)
         // So that scale is the same across all groups
         .domain([0, 105])
-        .range([margin.left, margin.left + chartWidth]);
+        .range([margin.left, margin.left + graphWidth]);
 
       // Draw x axis
       // let nAxis = d3.axisBottom(nScale).ticks(10);
       // svg
       //   .append("g")
       //   .attr("class", "n-axis")
-      //   .attr("transform", `translate(0, ${margin.top + chartHeight})`)
+      //   .attr("transform", `translate(0, ${margin.top + graphHeight})`)
       //   .call(nAxis);
 
       // Add svg groups each with .congress-session

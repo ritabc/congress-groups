@@ -14,10 +14,11 @@
     </div>
     <!-- If showing sidebar, push chart Options to the Right -->
     <timeline
-      v-if="dataIsReady"
+      v-if="dataIsReady && timelineMapToggle"
       v-bind:pushChartOptionsRight="showSidebar"
       v-bind:completeDataSet="allData"
     ></timeline>
+    <UsaStatesMap v-if="!timelineMapToggle"></UsaStatesMap>
   </div>
 </template>
 
@@ -25,12 +26,14 @@
 import sidebar from "./components/sidebar";
 import timeline from "./components/timeline";
 import d3 from "./d3Importer";
+import UsaStatesMap from "./components/UsaStatesMap.vue";
 
 export default {
   name: "app",
   components: {
     sidebar,
     timeline,
+    UsaStatesMap,
   },
   data() {
     return {
@@ -39,6 +42,7 @@ export default {
       windowWidth: window.innerWidth,
       allData: [],
       dataIsReady: false,
+      timelineMapToggle: true,
     };
   },
   watch: {

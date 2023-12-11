@@ -1,7 +1,8 @@
-import { csv } from "d3-fetch";
+import { csv, json } from "d3-fetch";
 import { selectAll, select, append, attr } from "d3-selection";
 import { domain, range, nice, scaleLinear, scaleTime } from "d3-scale";
 import { axisLeft, ticks } from "d3-axis";
+import { geoPath, geoAlbersUsa, svg } from "d3-geo";
 
 export default {
   csv,
@@ -16,4 +17,8 @@ export default {
   scaleTime,
   axisLeft,
   ticks,
+  geoPath,
+  geoAlbersUsa,
+  svg,
+  json,
 };
