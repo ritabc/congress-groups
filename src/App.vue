@@ -1,9 +1,32 @@
 <template>
   <div id="app" class="wrapper">
     <div class="sidebar" v-bind:class="{ active: showSidebar }">
-      <sidebar v-bind:title="title"></sidebar>
+      <sidebar
+        v-bind:title="title"
+        v-on:change-component="updateComponentShown"
+      ></sidebar>
     </div>
-    <div>
+    <!-- <div> -->
+    <!-- <b-card no-body>
+        <b-tabs pills vertical end>
+          <b-tab title="Timeline" active lazy>
+            <timeline
+              v-if="dataIsReady"
+              v-bind:pushChartOptionsRight="showSidebar"
+              v-bind:completeDataSet="allData"
+            >
+            </timeline>
+          </b-tab>
+          <b-tab title="Map" lazy>
+            <UsaStatesMap
+              v-if="dataIsReady"
+              v-bind:completeDataSet="allData"
+            ></UsaStatesMap
+          ></b-tab>
+        </b-tabs>
+      </b-card> -->
+    <!-- </div> -->
+    <!-- <div>
       <b-navbar class="toggle-button">
         <b-navbar-nav class="ml-auto">
           <b-button variant="info" v-on:click="collapseSidebar()"
@@ -11,15 +34,24 @@
           >
         </b-navbar-nav>
       </b-navbar>
-    </div>
+    </div> -->
+    <!-- <div>
+      <b-navbar class="toggle-button"
+        ><b-navbar-nav>
+          <p>Show Timeline</p>
+          <b-form-checkbox v-model="timelineOrMap" switch></b-form-checkbox>
+          <p>Show Map</p>
+        </b-navbar-nav></b-navbar
+      >
+    </div> -->
     <!-- If showing sidebar, push chart Options to the Right -->
     <timeline
-      v-if="dataIsReady && timelineMapToggle"
+      v-if="dataIsReady && timelineOrMap"
       v-bind:pushChartOptionsRight="showSidebar"
       v-bind:completeDataSet="allData"
     ></timeline>
     <UsaStatesMap
-      v-if="dataIsReady && !timelineMapToggle"
+      v-if="dataIsReady && !timelineOrMap"
       v-bind:completeDataSet="allData"
     ></UsaStatesMap>
   </div>
@@ -41,11 +73,12 @@ export default {
   data() {
     return {
       title: "Minority Groups In Congresss",
-      showSidebar: false,
+      showSidebar: true,
       windowWidth: window.innerWidth,
       allData: [],
       dataIsReady: false,
-      timelineMapToggle: false,
+      // timelineMapToggle: true,
+      timelineOrMap: true,
     };
   },
   watch: {
@@ -64,9 +97,9 @@ export default {
     window.removeEventListener("resize", this.onResize);
   },
   methods: {
-    collapseSidebar() {
-      this.showSidebar = !this.showSidebar;
-    },
+    // collapseSidebar() {
+    //   this.showSidebar = !this.showSidebar;
+    // },
     onResize() {
       this.windowWidth = window.innerWidth;
     },
@@ -74,6 +107,13 @@ export default {
       let data = await d3.csv("./data/minorityGroupCongressMembers.csv");
       this.allData = data;
       this.dataIsReady = true;
+    },
+    updateComponentShown(componentToShow) {
+      if (componentToShow === "timeline") {
+        this.timelineOrMap = false;
+      } else if (componentToShow === "map") {
+        this.timelineOrMap = true;
+      }
     },
   },
 };
