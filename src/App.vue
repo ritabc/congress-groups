@@ -18,7 +18,10 @@
       v-bind:pushChartOptionsRight="showSidebar"
       v-bind:completeDataSet="allData"
     ></timeline>
-    <UsaStatesMap v-if="!timelineMapToggle"></UsaStatesMap>
+    <UsaStatesMap
+      v-if="dataIsReady && !timelineMapToggle"
+      v-bind:completeDataSet="allData"
+    ></UsaStatesMap>
   </div>
 </template>
 
@@ -42,7 +45,7 @@ export default {
       windowWidth: window.innerWidth,
       allData: [],
       dataIsReady: false,
-      timelineMapToggle: true,
+      timelineMapToggle: false,
     };
   },
   watch: {

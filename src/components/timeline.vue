@@ -1,12 +1,8 @@
 <template>
   <b-container fluid>
-    <b-row class="tl-header py-2">
-      <b-col offset-lg="3" lg="7">
-        <minority-group-selector
-          v-on:group-changed="filterDataRerender"
-        ></minority-group-selector>
-      </b-col>
-    </b-row>
+    <minority-group-selector
+      v-on:group-changed="filterDataRerender"
+    ></minority-group-selector>
     <b-row
       class="chart-options pt-4"
       v-bind:class="{ pushOver: pushChartOptionsRight }"
@@ -54,7 +50,7 @@
 <script>
 import d3 from "./../d3Importer";
 import filter from "../filter";
-import MinorityGroupSelector from "./MinorityGroupSelector.vue";
+import MinorityGroupSelector from "./MinorityGroupSelector";
 const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.24;
 
 export default {
@@ -309,9 +305,6 @@ export default {
   }
 }
 
-.tl-header {
-  background-color: steelblue;
-}
 .svg-container {
   display: inline-block;
   position: relative;

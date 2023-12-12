@@ -1,8 +1,17 @@
 import { csv, json } from "d3-fetch";
-import { selectAll, select, append, attr } from "d3-selection";
-import { domain, range, nice, scaleLinear, scaleTime } from "d3-scale";
-import { axisLeft, ticks } from "d3-axis";
+import { selectAll, select, append, attr, create } from "d3-selection";
+import {
+  domain,
+  range,
+  nice,
+  scaleLinear,
+  scaleTime,
+  scaleSequential,
+} from "d3-scale";
+import { axisLeft, ticks, axisBottom } from "d3-axis";
 import { geoPath, geoAlbersUsa, svg } from "d3-geo";
+import { interpolator } from "d3-scale-chromatic";
+import { interpolateRound } from "d3-interpolate";
 
 export default {
   csv,
@@ -21,4 +30,9 @@ export default {
   geoAlbersUsa,
   svg,
   json,
+  scaleSequential,
+  interpolator,
+  interpolateRound,
+  axisBottom,
+  create,
 };

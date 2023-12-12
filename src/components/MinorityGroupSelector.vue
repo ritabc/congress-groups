@@ -1,10 +1,14 @@
 <template>
-  <b-form-select
-    v-model="group"
-    v-bind:options="groups"
-    v-on:change="updateSelectedGroup"
-    class="mx-3"
-  ></b-form-select>
+  <b-row class="group-selector-header py-2">
+    <b-col offset-lg="3" lg="7">
+      <b-form-select
+        v-model="group"
+        v-bind:options="groups"
+        v-on:change="updateSelectedGroup"
+        class="mx-3"
+      ></b-form-select>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -14,12 +18,12 @@ export default {
     return {
       group: "Black",
       groups: [
-        { value: "Black", text: "Showing Black Americans In Congress" },
-        { value: "Women", text: "Showing Female Americans In Congress" },
-        { value: "Hispanic", text: "Showing Hispanic Americans In Congress" },
+        { value: "Black", text: "Show Black Americans In Congress" },
+        { value: "Women", text: "Show Female Americans In Congress" },
+        { value: "Hispanic", text: "Show Hispanic Americans In Congress" },
         {
           value: "APA",
-          text: "Showing Asian Pacific Islander Americans In Congress",
+          text: "Show Asian Pacific Islander Americans In Congress",
         },
       ],
     };
@@ -31,3 +35,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.group-selector-header {
+  background-color: steelblue;
+}
+</style>
