@@ -2,14 +2,14 @@
 
 ### Created by Rita Bennett-Chew
 
-An app built to practice and learn Vue and D3. In addition, this site was created to visualize trends of politicians in minority groups serving in Congress.
+An app built to practice and learn Vue and D3. In addition, this site was created to visualize trends of politicians in minority groups serving in Congress. A live version of the site can be found here: https://congress-groups.vercel.app/
 
 ## Tools Used
 
 - Vue, Vue CLI
 - D3
 - Bootstrap, Bootstrap-Vue
-- Heroku
+- Vercel
 - Data from [history.house.gov](https://history.house.gov/)
 
 ## Completed Features
